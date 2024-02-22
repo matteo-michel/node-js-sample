@@ -18,8 +18,8 @@ jobs:
             sleep 3
             curl http://localhost:8080
             docker stop backspace
-#            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-#            docker push iwarzie/nodejs_sample:$TAG
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            docker push iwarzie/nodejs_sample:$TAG
 
 workflows:
   build-docker-workflow:
