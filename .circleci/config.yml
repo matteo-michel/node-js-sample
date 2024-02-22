@@ -8,6 +8,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Get Docker Host IP
+          command: |
+            export DOCKER_HOST_IP=$(awk "\$2 == \"$CIRCLECI\" { print \$1; exit }" /etc/hosts)
+            echo "DOCKER_HOST_IP=$DOCKER_HOST_IP"
+      - run:
           name: Build Docker image
           command: |
             docker build -t myapp .
@@ -16,6 +21,6 @@ jobs:
           command: |
             docker run -d -p 8080:8080 --name myapp_container myapp
             sleep 5
-            wget http://host.docker.internal:8080
+            wget http://$DOCKER_HOST_IP:8080
             docker stop myapp_container
             docker rm myapp_container
