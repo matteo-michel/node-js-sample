@@ -2,25 +2,21 @@ version: 2.1
 
 jobs:
   build:
-    docker:
-      - image: cimg/base:2024.01
+    machine:
+      image: ubuntu-2004:202101-01
     steps:
       - checkout
-      - setup_remote_docker
       - run:
-          name: Get Docker Host IP
+          name: Install dependencies
           command: |
-            export DOCKER_HOST_IP=$(awk "\$2 == \"$CIRCLECI\" { print \$1; exit }" /etc/hosts)
-            echo "DOCKER_HOST_IP=$DOCKER_HOST_IP"
+            sudo apt update
+            sudo apt install -y nodejs npm wget
       - run:
-          name: Build Docker image
+          name: Build and test
           command: |
-            docker build -t myapp .
+            npm install
+            npm test
       - run:
-          name: Test Docker container
+          name: Test wget
           command: |
-            docker run -d -p 8080:8080 --name myapp_container myapp
-            sleep 5
-            wget http://$DOCKER_HOST_IP:8080
-            docker stop myapp_container
-            docker rm myapp_container
+            wget http://localhost:8080
