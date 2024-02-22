@@ -16,6 +16,6 @@ jobs:
           command: |
             docker run -d -p 8080:8080 --name myapp_container myapp
             sleep 5
-            wget http://localhost:8080
+            wget http://host.docker.internal:8080
             docker stop myapp_container
             docker rm myapp_container
